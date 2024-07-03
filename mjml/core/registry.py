@@ -2,12 +2,16 @@
 
 __all__ = ['components', 'register_components', 'register_core_components']
 
-from typing import List, Type
+import typing as t
 
 
-components = {}
+if t.TYPE_CHECKING:
+    from mjml.core.api import Component
 
-def register_core_components():
+
+components: t.Dict[str, t.Type["Component"]] = {}
+
+def register_core_components() -> t.Dict[str, t.Type["Component"]]:
     from ..elements import (
         MjAccordion,
         MjAccordionElement,
@@ -82,6 +86,6 @@ def register_core_components():
     return components
 
 
-def register_components(source: List[Type]):
+def register_components(source: t.List[t.Type["Component"]]) -> None:
     for component in source:
         components[component.component_name] = component
