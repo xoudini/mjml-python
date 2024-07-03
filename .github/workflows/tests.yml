@@ -5,6 +5,7 @@ on:
     branches:
     - main
     - ci
+    - typing-experimental
   pull_request:
     branches:
     - main
