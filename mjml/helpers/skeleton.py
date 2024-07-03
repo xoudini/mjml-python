@@ -1,5 +1,5 @@
-
 import textwrap
+import typing as t
 
 from jinja2 import Template
 
@@ -14,15 +14,24 @@ __all__ = ['skeleton_str']
 # js: skeleton(...)
 def skeleton_str(*,
     inlineStyle,
-    title='', content='', backgroundColor='', breakpoint='480px', lang=None,
-    fonts=None, mediaQueries=None,
-    headStyle=None, componentsHeadStyle=(), style=(), headRaw=(),
-    classes=None,
-    preview = None,
-    defaultAttributes=None
-    ):
+    title: str='', content: str='', backgroundColor: str='',
+    breakpoint: str='480px', lang: t.Optional[str]=None,
+    fonts: t.Optional[t.Any]=None, mediaQueries: t.Optional[t.Any]=None,
+    headStyle: t.Optional[t.Any]=None,
+    componentsHeadStyle: t.Sequence[t.Any]=(),
+    style: t.Sequence[t.Any]=(),
+    headRaw: t.Sequence[t.Any]=(),
+    classes: t.Optional[t.Any]=None,
+    preview: t.Optional[t.Any] = None,
+    defaultAttributes: t.Optional[t.Any]=None
+    ) -> str:
 
-    apply_breakpoints = lambda values: tuple(map(lambda v: v(breakpoint), values))
+    # apply_breakpoints = lambda values: tuple(map(lambda v: v(breakpoint), values))
+    def apply_breakpoints(values):
+        def _add_breakpoint(v):
+            return v(breakpoint)
+        return tuple(map(_add_breakpoint, values))
+
     components_head_style_strs = apply_breakpoints(componentsHeadStyle)
 
     if headStyle:
@@ -33,10 +42,7 @@ def skeleton_str(*,
         headStyle = tuple(headStyle.values())
     else:
         headStyle = ()
-    def apply_breakpoints(values):
-        def _add_breakpoint(v):
-            return v(breakpoint)
-        return tuple(map(_add_breakpoint, values))
+
     head_style_strs = apply_breakpoints(headStyle)
     extra_style = f'<style type="text/css">{"".join(style or "")}</style>'
 
