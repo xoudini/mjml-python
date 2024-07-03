@@ -12,12 +12,11 @@ on:
 
 jobs:
   tests:
-    # "ubuntu-latest" does not have Python 3.6
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, "3.10", "3.11", "3.12", "pypy-3.8", "pypy-3.9"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "pypy-3.8", "pypy-3.9", "pypy-3.10"]
 
     steps:
     - uses: actions/checkout@v4
@@ -36,9 +35,5 @@ jobs:
 
     - name: Test CSS inlining
       run: |
-        if [[ "${{ matrix.python-version }}" != "3.6" ]]; then
-          pip install -e .[css_inlining]
-          pytest
-        else
-          echo "Skipping CSS inlining tests for Python 3.6"
-        fi
+        pip install -e .[css_inlining]
+        pytest
