@@ -1,9 +1,13 @@
+import typing as t
+
 
 __all__ = ['suffixCssClasses']
 
-def suffixCssClasses(classes, suffix):
-    if not classes:
-        return ''
-    class_list = classes.split(' ')
-    suffixed_classes = map(lambda cls_str: f'{cls_str}-{suffix}', class_list)
-    return ' '.join(suffixed_classes)
+
+def suffixCssClasses(classes: t.Optional[str], suffix: str) -> str:
+    if classes is None or not (stripped := classes.strip()):
+        return ""
+
+    _classes = stripped.split(' ')
+    suffixed = map(lambda _class: f'{_class}-{suffix}', _classes)
+    return ' '.join(suffixed)
