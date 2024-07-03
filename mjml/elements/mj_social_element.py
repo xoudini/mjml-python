@@ -1,13 +1,30 @@
+import typing as t
+
+import typing_extensions as te
 
 from ..helpers import widthParser
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
+
+
+_SocialNetwork = t.TypedDict(
+    "_SocialNetwork",
+    {
+        "background-color": str,
+        "src": str,
+        "share-url": te.NotRequired[str],
+    }
+)
 
 
 __all__ = ['MjSocialElement']
 
 IMG_BASE_URL = 'https://www.mailjet.com/images/theme/v1/icons/ico-social/'
 
-defaultSocialNetworks = {
+defaultSocialNetworks: t.Dict[str, "_SocialNetwork"] = {
     'facebook'  : {
         'share-url'       : 'https://www.facebook.com/sharer/sharer.php?u=[[URL]]',
         'background-color': '#3b5998',
@@ -94,8 +111,9 @@ for key, value in list(defaultSocialNetworks.items()):
 class MjSocialElement(BodyComponent):
     component_name = 'mj-social-element'
 
+    @te.override
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'align'           : 'enum(left,center,right)',
             'background-color': 'color',
@@ -128,8 +146,9 @@ class MjSocialElement(BodyComponent):
             'vertical-align'  : 'enum(top,middle,bottom)',
         }
 
+    @te.override
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'align'          : 'left',
             'color'          : '#000',
@@ -138,14 +157,15 @@ class MjSocialElement(BodyComponent):
             'font-size'      : '13px',
             'line-height'    : '1',
             'padding'        : '4px',
-            'text-padding'   : '4px 4px 4px 0',
             'target'         : '_blank',
             'text-decoration': 'none',
+            'text-padding'   : '4px 4px 4px 0',
             'vertical-align' : 'middle',
         }
 
     # js: getStyles()
-    def get_styles(self):
+    @te.override
+    def get_styles(self) -> t.Dict[str, t.Dict[str, t.Any]]:
         attributes = self.getSocialAttributes()
         iconSize = attributes['icon-size']
         iconHeight = attributes['icon-height']
@@ -187,7 +207,7 @@ class MjSocialElement(BodyComponent):
             },
         }
 
-    def getSocialAttributes(self):
+    def getSocialAttributes(self) -> t.Dict[str, t.Any]:
         socialNetwork = defaultSocialNetworks.get(self.getAttribute('name'), {})
         href = self.getAttribute('href')
 

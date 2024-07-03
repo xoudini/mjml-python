@@ -28,5 +28,6 @@ class HeadComponent(Component):
                 return component.render()
             return None
 
+        # TODO typing: fix
         childrens = self.props.get("children")
         return tuple(map(handle_children, childrens))

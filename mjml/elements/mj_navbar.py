@@ -1,8 +1,13 @@
 import random
 import string
+import typing as t
 
 from ..helpers import conditionalTag, msoConditionalTag
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjNavbar']
@@ -12,7 +17,7 @@ class MjNavbar(BodyComponent):
     component_name = 'mj-navbar'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'align'              : 'enum(left,center,right)',
             'base-url'           : 'string',
@@ -39,7 +44,7 @@ class MjNavbar(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'align'              : 'center',
             'base-url'           : None,
@@ -56,7 +61,7 @@ class MjNavbar(BodyComponent):
             'ico-line-height'    : '30px',
         }
 
-    def headStyle(self, breakpoint):
+    def headStyle(self, breakpoint) -> str:
         # double curly braces used to escape "{" and "}" in f-strings
         return f'''
             noinput.mj-menu-checkbox {{ display:block!important; max-height:none!important; visibility:visible!important; }}

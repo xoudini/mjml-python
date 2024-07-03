@@ -1,5 +1,10 @@
+import typing as t
 
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjAccordionText']
@@ -9,7 +14,7 @@ class MjAccordionText(BodyComponent):
     component_name = 'mj-accordion-text'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'background-color': 'color',
             'font-size'       : 'unit(px)',
@@ -26,7 +31,7 @@ class MjAccordionText(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'font-size'  : '13px',
             'line-height': '1',
@@ -56,7 +61,7 @@ class MjAccordionText(BodyComponent):
             },
         }
 
-    def renderContent(self):
+    def renderContent(self) -> str:
         td_attrs = self.html_attrs(
             class_=self.get_attr('css-class', missing_ok=True),
             style='td',
@@ -67,7 +72,7 @@ class MjAccordionText(BodyComponent):
             </td>
         '''
 
-    def render(self):
+    def render(self) -> str:
         div_attrs = self.html_attrs(class_='mj-accordion-content')
         table_attrs = self.html_attrs(
             cellspacing='0',

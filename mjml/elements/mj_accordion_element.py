@@ -1,6 +1,11 @@
+import typing as t
 
 from ..helpers import conditionalTag
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjAccordionElement']
@@ -10,14 +15,14 @@ class MjAccordionElement(BodyComponent):
     component_name = 'mj-accordion-element'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'background-color'  : 'color',
             'border'            : 'string',
             'font-family'       : 'string',
             'icon-align'        : 'enum(top,middle,bottom)',
-            'icon-width'        : 'unit(px,%)',
             'icon-height'       : 'unit(px,%)',
+            'icon-width'        : 'unit(px,%)',
             'icon-wrapped-url'  : 'string',
             'icon-wrapped-alt'  : 'string',
             'icon-unwrapped-url': 'string',
@@ -25,8 +30,9 @@ class MjAccordionElement(BodyComponent):
             'icon-position'     : 'enum(left,right)',
         }
 
+    # TODO typing: fix everywhere
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> t.Dict[str, t.Any]: # type: ignore[override]
         return {
             'title': {
                 'img': {

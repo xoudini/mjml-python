@@ -5,6 +5,10 @@ import typing_extensions as te
 from ._head_base import HeadComponent
 
 
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
+
+
 __all__ = ['MjStyle']
 
 class MjStyle(HeadComponent):
@@ -12,7 +16,7 @@ class MjStyle(HeadComponent):
 
     @te.override
     @classmethod
-    def default_attrs(cls) -> t.Dict[str, str]:
+    def default_attrs(cls) -> "_Attrs":
         return {
             'inline': '',
         }

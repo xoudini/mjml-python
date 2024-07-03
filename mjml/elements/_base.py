@@ -8,7 +8,7 @@ from ..lib import merge_dicts
 
 
 if t.TYPE_CHECKING:
-    from mjml._types import _Direction
+    from mjml._types import _Attr, _Attrs, _Direction
 
 
 __all__ = [
@@ -20,8 +20,9 @@ class BodyComponent(Component):
     def render(self) -> str:
         raise NotImplementedError(f'{self.__class__.__name__} should override ".render()"')
 
+    # TODO typing: split into _ShorthandAttr?
     def getShorthandAttrValue(self,
-                              attribute: str, direction: "_Direction",
+                              attribute: "_Attr", direction: "_Direction",
                               attr_with_direction: bool=True) -> int:
         if attr_with_direction:
             mjAttributeDirection = self.getAttribute(f'{attribute}-{direction}')
@@ -35,10 +36,23 @@ class BodyComponent(Component):
             return 0
         return shorthandParser(mjAttribute, direction)
 
-    def getShorthandBorderValue(self, direction: "_Direction") -> int:
-        borderDirection = direction and self.getAttribute(f'border-{direction}')
-        border = self.getAttribute('border')
-        return borderParser(borderDirection or border or '0')
+    def getShorthandBorderValue(self, direction: t.Optional["_Direction"]) -> int:
+        def _get_partial_border(_direction: "_Direction") -> t.Optional[t.Any]:
+            if _direction is None:
+                return None
+
+            _attrs: t.Dict["_Direction", "_Attr"] = {
+                "bottom": "border-bottom",
+                "left": "border-left",
+                "right": "border-right",
+                "top": "border-top",
+            }
+            _attr = _attrs[_direction]
+            return self.get_attr(_attr)
+
+        partial_border = _get_partial_border(direction)
+        border =  self.get_attr("border")
+        return borderParser(partial_border or border or '0')
 
     def getBoxWidths(self) -> t.Dict[str, t.Any]:
         containerWidth = self.context['containerWidth']
@@ -54,9 +68,10 @@ class BodyComponent(Component):
             'box'       : parsedWidth - paddings - borders,
         }
 
+    # TODO typing: fix with `te.Unpack["_Attrs"]`
     # js: htmlAttributes(attributes)
     def html_attrs(self, **attrs: t.Any) -> str:
-        def _to_str(key: str, value: t.Any) -> t.Optional[str]:
+        def _to_str(key: str, value: t.Optional[t.Any]) -> t.Optional[str]:
             if key == 'style':
                 value = self.styles(value)
             elif key in ['class_', 'for_']:

@@ -1,7 +1,12 @@
+import typing as t
 
 from ..helpers import parse_float, parse_int, strip_unit, widthParser
 from ..lib import merge_dicts
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjColumn']
@@ -10,7 +15,7 @@ class MjColumn(BodyComponent):
     component_name = 'mj-column'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'background-color': 'color',
             'border'          : 'string',
@@ -39,7 +44,7 @@ class MjColumn(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'direction'       : 'ltr',
             'vertical-align'  : 'top',

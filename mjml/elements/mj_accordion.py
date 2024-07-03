@@ -1,5 +1,10 @@
+import typing as t
 
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjAccordion']
@@ -8,7 +13,7 @@ class MjAccordion(BodyComponent):
     component_name = 'mj-accordion'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'container-background-color': 'color',
             'border'                    : 'string',
@@ -29,7 +34,7 @@ class MjAccordion(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'border'            : '2px solid black',
             'font-family'       : 'Ubuntu, Helvetica, Arial, sans-serif',
@@ -44,7 +49,7 @@ class MjAccordion(BodyComponent):
             'padding'           : '10px 25px',
         }
 
-    def headStyle(self, breakpoint):
+    def headStyle(self, breakpoint) -> str:
         return '''
             noinput.mj-accordion-checkbox { display:block!important; }
             @media yahoo, only screen and (min-width:0) {
@@ -88,7 +93,7 @@ class MjAccordion(BodyComponent):
         '''
 
     # js: getStyles()
-    def get_styles(self):
+    def get_styles(self) -> t.Dict[str, t.Any]:
         return {
             'table': {
                 'width'          : '100%',
@@ -99,7 +104,7 @@ class MjAccordion(BodyComponent):
             },
         }
 
-    def render(self):
+    def render(self) -> str:
         children = self.props['children']
         children_attrs = {
             'border'            : self.get_attr('border'),

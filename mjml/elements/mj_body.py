@@ -1,6 +1,11 @@
+import typing as t
 
 from ..lib import merge_dicts
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjBody']
@@ -9,14 +14,14 @@ class MjBody(BodyComponent):
     component_name = 'mj-body'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'background-color': '',
             'css-class'       : None,
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'width'           : '600px',
         }

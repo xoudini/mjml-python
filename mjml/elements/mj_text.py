@@ -1,5 +1,10 @@
+import typing as t
 
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjText']
@@ -8,7 +13,7 @@ class MjText(BodyComponent):
     component_name = 'mj-text'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'align'            : 'enum(left,right,center,justify)',
             'background-color' : 'color',
@@ -34,7 +39,7 @@ class MjText(BodyComponent):
   }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'align'            : 'left',
             'color'            : '#000000',

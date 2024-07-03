@@ -1,5 +1,10 @@
+import typing as t
 
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjAccordionTitle']
@@ -11,7 +16,7 @@ class MjAccordionTitle(BodyComponent):
     component_name = 'mj-accordion-title'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'background-color': 'color',
             'color'           : 'color',
@@ -25,7 +30,7 @@ class MjAccordionTitle(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'font-size': '13px',
             'padding'  : '16px',
@@ -62,7 +67,7 @@ class MjAccordionTitle(BodyComponent):
             },
         }
 
-    def renderTitle(self):
+    def renderTitle(self) -> str:
         td_attrs = self.html_attrs(
             class_=self.get_attr('css-class', missing_ok=True),
             style='td',
@@ -74,7 +79,7 @@ class MjAccordionTitle(BodyComponent):
             </td>
         '''
 
-    def renderIcons(self):
+    def renderIcons(self) -> str:
         td_attrs = self.html_attrs(
             class_='mj-accordion-ico',
             style='td2',
@@ -102,7 +107,7 @@ class MjAccordionTitle(BodyComponent):
             True
         )
 
-    def render(self):
+    def render(self) -> str:
         content_elements = [self.renderTitle(), self.renderIcons()]
         if self.get_attr('icon-position', missing_ok=True) != 'right':
             content_elements.reverse()

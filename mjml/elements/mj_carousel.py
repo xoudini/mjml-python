@@ -1,10 +1,14 @@
-
 import random
 import string
+import typing as t
 from itertools import repeat
 
 from ..helpers import msoConditionalTag, widthParser
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjCarousel']
@@ -14,7 +18,7 @@ class MjCarousel(BodyComponent):
     component_name = 'mj-carousel'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'align'                     : 'enum(left,center,right)',
             'border-radius'             : 'unit(px,%){1,4}',
@@ -36,7 +40,7 @@ class MjCarousel(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'align'                   : 'center',
             'border-radius'           : '6px',

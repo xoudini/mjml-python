@@ -1,5 +1,10 @@
+import typing as t
 
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attr, _Attrs
 
 
 __all__ = ['MjSocial']
@@ -8,7 +13,7 @@ class MjSocial(BodyComponent):
     component_name = 'mj-social'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'align'                     : 'enum(left,right,center)',
             'border-radius'             : 'unit(px,%)',
@@ -36,7 +41,7 @@ class MjSocial(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'align'          : 'center',
             'border-radius'  : '3px',
@@ -65,7 +70,7 @@ class MjSocial(BodyComponent):
         if padding:
             base['padding'] = padding
 
-        for attr_name in [
+        attr_names: t.Sequence[_Attr] = [
             'border-radius',
             'color',
             'font-family',
@@ -78,7 +83,9 @@ class MjSocial(BodyComponent):
             'text-padding',
             'line-height',
             'text-decoration',
-        ]:
+        ]
+
+        for attr_name in attr_names:
             attr = self.getAttribute(attr_name)
             if attr is not None:
                 base[attr_name] = attr

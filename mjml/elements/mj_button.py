@@ -1,6 +1,11 @@
+import typing as t
 
 from ..helpers import widthParser
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjButton']
@@ -9,7 +14,7 @@ class MjButton(BodyComponent):
     component_name = 'mj-button'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'align'            : 'enum(left,center,right)',
             'background-color' : 'color',
@@ -49,7 +54,7 @@ class MjButton(BodyComponent):
 
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'align'            : 'center',
             'background-color' : '#414141',
@@ -69,7 +74,7 @@ class MjButton(BodyComponent):
         }
 
 
-    def get_styles(self):
+    def get_styles(self) -> t.Dict[str, t.Any]:
         this = self
         return {
             'table': {
@@ -112,7 +117,7 @@ class MjButton(BodyComponent):
         }
 
 
-    def calculateAWidth(self, width):
+    def calculateAWidth(self, width: t.Optional[str]) -> t.Optional[str]:
         if not width:
             return None
 
@@ -128,11 +133,10 @@ class MjButton(BodyComponent):
         width_int = parsedWidth - innerPaddings - borders
         return f'{width_int}px'
 
-    def render(self):
-        href_str = self.getAttribute('href')
-        is_anchor = bool(href_str)
-        target = self.getAttribute('target') if is_anchor else None
-        if is_anchor and href_str.startswith('mailto:') and (target == '_blank'):
+    def render(self) -> str:
+        href_str = t.cast(t.Optional[str], self.getAttribute('href'))
+        target = self.getAttribute('target') if href_str else None
+        if href_str and href_str.startswith('mailto:') and (target == '_blank'):
             # Thunderbird opens a blank page instead of the new message window
             # if the <a> contains 'target="_blank"'.
             #   https://bugzilla.mozilla.org/show_bug.cgi?id=1677248
@@ -163,7 +167,7 @@ class MjButton(BodyComponent):
             style   = 'td',
             valign  = self.getAttribute('vertical-align'),
         )
-        tag = 'a' if is_anchor else 'p'
+        tag = 'a' if href_str else 'p'
         return f'''
             <table {table_attrs} >
               <tr>

@@ -1,6 +1,11 @@
+import typing as t
 
 from ..helpers import suffixCssClasses
 from . import MjSection
+
+
+if t.TYPE_CHECKING:
+    from mjml.elements._base import Component
 
 
 __all__ = ['MjWrapper']
@@ -9,11 +14,11 @@ __all__ = ['MjWrapper']
 class MjWrapper(MjSection):
     component_name = 'mj-wrapper'
 
-    def renderWrappedChildren(self):
+    def renderWrappedChildren(self) -> str:
         children = self.props['children']
         containerWidth = self.context['containerWidth']
 
-        def render_child(component):
+        def render_child(component: "Component") -> str:
             if component.isRawElement():
                 return component.render()
             td_ie_attrs = component.html_attrs(

@@ -1,5 +1,10 @@
+import typing as t
 
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjSpacer']
@@ -9,7 +14,7 @@ class MjSpacer(BodyComponent):
     component_name = 'mj-spacer'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'border'                    : 'string',
             'border-bottom'             : 'string',
@@ -26,7 +31,7 @@ class MjSpacer(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'height': '20px',
         }

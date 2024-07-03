@@ -1,6 +1,11 @@
+import typing as t
 
 from ..helpers import conditionalTag, suffixCssClasses
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjNavbarLink']
@@ -10,7 +15,7 @@ class MjNavbarLink(BodyComponent):
     component_name = 'mj-navbar-link'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'color'          : 'color',
             'font-family'    : 'string',
@@ -33,7 +38,7 @@ class MjNavbarLink(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'color'          : '#000000',
             'font-family'    : 'Ubuntu, Helvetica, Arial, sans-serif',

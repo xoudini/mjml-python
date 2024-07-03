@@ -1,7 +1,11 @@
-
+import typing as t
 
 from ..helpers import suffixCssClasses, widthParser
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjCarouselImage']
@@ -11,7 +15,7 @@ class MjCarouselImage(BodyComponent):
     component_name = 'mj-carousel-image'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'alt'             : 'string',
             'href'            : 'string',
@@ -26,7 +30,7 @@ class MjCarouselImage(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'target': '_blank',
         }

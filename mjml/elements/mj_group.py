@@ -1,7 +1,12 @@
+import typing as t
 
 from ..helpers import strip_unit, widthParser
 from ..lib import merge_dicts
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjGroup']
@@ -10,7 +15,7 @@ class MjGroup(BodyComponent):
     component_name = 'mj-group'
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'background-color' : '',
             'direction'        : 'ltr',

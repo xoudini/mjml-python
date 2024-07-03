@@ -1,6 +1,11 @@
+import typing as t
 
 from ..helpers import widthParser
 from ._base import BodyComponent
+
+
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
 
 
 __all__ = ['MjTable']
@@ -9,7 +14,7 @@ class MjTable(BodyComponent):
     component_name = 'mj-table'
 
     @classmethod
-    def allowed_attrs(cls):
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'align'            : 'enum(left,right,center)',
             'border'           : 'string',
@@ -34,7 +39,7 @@ class MjTable(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'align'            : 'left',
             'border'           : 'none',
@@ -65,10 +70,17 @@ class MjTable(BodyComponent):
 
     def getWidth(self):
         width = self.get_attr('width')
+
+        if width is None:
+            raise ValueError("width is null")
+
+        if not isinstance(width, str):
+            raise TypeError(f"width is {type(width)}, must be 'str'")
+
         parsedWidth, unit = widthParser(width)
         return width if (unit == '%') else parsedWidth
 
-    def render(self):
+    def render(self) -> str:
         table_attrs = self.html_attrs(
             width  = self.getWidth(),
             border = '0',

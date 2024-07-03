@@ -8,6 +8,10 @@ from ..lib import merge_dicts
 from ._base import BodyComponent
 
 
+if t.TYPE_CHECKING:
+    from mjml._types import _Attrs
+
+
 __all__ = ['MjSection']
 
 Position = namedtuple('Position', ('x', 'y'))
@@ -17,7 +21,7 @@ class MjSection(BodyComponent):
     component_name = 'mj-section'
 
     @classmethod
-    def allowed_attrs(cls) -> t.Dict[str, str]:
+    def allowed_attrs(cls) -> "_Attrs":
         return {
             'background-color' : 'color',
             'background-url'   : 'string',
@@ -44,7 +48,7 @@ class MjSection(BodyComponent):
         }
 
     @classmethod
-    def default_attrs(cls):
+    def default_attrs(cls) -> "_Attrs":
         return {
             'background-repeat': 'repeat',
             'background-size'  : 'auto',
