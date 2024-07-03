@@ -4,6 +4,10 @@ from ..lib import merge_dicts
 from .registry import components
 
 
+if t.TYPE_CHECKING:
+    from mjml._types import _Attr, _Attrs
+
+
 __all__ = ['initComponent', 'Component']
 
 def initComponent(name: t.Optional[str],
@@ -27,7 +31,9 @@ class Component:
     component_name: t.ClassVar[str]
 
     # LATER: not sure upstream also passes tagName, makes code easier for us
-    def __init__(self, *, attributes=None, children=(), content: str='',
+    def __init__(self, *, attributes: t.Optional[t.Dict[str, t.Any]]=None,
+                 children: t.Sequence[t.Any]=(),
+                 content: str='',
                  context: t.Optional[t.Dict[str, t.Any]]=None,
                  props: t.Optional[t.Dict[str, t.Any]]=None,
                  globalAttributes: t.Optional[t.Dict[str, t.Any]]=None,
@@ -54,8 +60,7 @@ class Component:
 
     @classmethod
     def getTagName(cls) -> str:
-        cls_name = cls.__name__
-        return cls_name
+        return cls.__name__
 
     @classmethod
     def isRawElement(cls) -> bool:
@@ -64,12 +69,12 @@ class Component:
 
     # js: static defaultAttributes
     @classmethod
-    def default_attrs(cls) -> t.Dict[str, t.Any]:
+    def default_attrs(cls) -> "_Attrs":
         return {}
 
     # js: static allowedAttributes
     @classmethod
-    def allowed_attrs(cls) -> t.Dict[str, str]:
+    def allowed_attrs(cls) -> "_Attrs":
         return {}
 
     def getContent(self) -> str:
@@ -85,12 +90,13 @@ class Component:
         return self.context
 
     # js: getAttribute(name)
-    def get_attr(self, name: str, *, missing_ok: bool=False) -> t.Optional[t.Any]:
+    def get_attr(self, name: "_Attr", *, missing_ok: bool=False) -> t.Optional[t.Any]:
         is_allowed_attr = name in self.allowed_attrs()
         is_default_attr = name in self.default_attrs()
         if not missing_ok and (not is_allowed_attr) and (not is_default_attr):
             raise AssertionError(f'{self.__class__.__name__} has no declared attr {name}')
         return self.attrs.get(name)
+
     getAttribute = get_attr
 
     def handler(self) -> t.Optional[str]:
